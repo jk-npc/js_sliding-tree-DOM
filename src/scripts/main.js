@@ -1,25 +1,18 @@
 'use strict';
 
 for (const li of document.querySelectorAll('li')) {
+  const textNode = Array.from(li.childNodes).find(
+    (node) =>
+      node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '',
+  );
+
+  if (!textNode) {
+    continue;
+  }
+
   const span = document.createElement('span');
 
-  const textNode = li.firstChild;
+  span.textContent = textNode.textContent.trim();
 
-  li.insertBefore(span, textNode);
-  span.appendChild(textNode);
+  li.replaceChild(span, textNode);
 }
-
-document.addEventListener('click', (e) => {
-  if (e.target.tagName !== 'SPAN') {
-    return;
-  }
-
-  const parentLi = e.target.closest('li');
-  const nestedUl = parentLi.querySelector('ul');
-
-  if (!nestedUl) {
-    return;
-  }
-
-  nestedUl.hidden = !nestedUl.hidden;
-});
